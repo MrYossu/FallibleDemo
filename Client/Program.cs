@@ -6,20 +6,40 @@ namespace Client {
   class Program {
     static void Main(string[] args) {
       using (CustomerServiceClient client = new CustomerServiceClient()) {
-        // Private method to save me repeating the same code for each service call. In a real app you probably wouldn't be doing the same thing so many times, so wouldn't need to do this
-        // Note that private methods are a C#7 feature, so if you're using C#6, you'll need to move this out of Main()
-        void Match(int id) {
-          Fallible<Customer> cf = client.GetCustomerFallible(id);
-          cf.Match(c => Console.WriteLine("Success: (" + c.ID + ") " + c.Name),
+        // Method #1 - get the Fallible object, then deal with it
+        Fallible<Customer> cf = client.GetCustomerFallible(1);
+        cf.Match(c => Console.WriteLine("Success: (" + c.ID + ") " + c.Name),
+          (msg, _) => Console.WriteLine("Exception: " + msg),
+          (msg, _) => Console.WriteLine("Bad idea: " + msg));
+
+        // Method #2 - Don't bother assigning the Fallible object to a local variable as we can't do anything
+        // with it other than call match, so might as well call it directly. This is neater
+        client.GetCustomerFallible(2)
+          .Match(c => Console.WriteLine("Success: (" + c.ID + ") " + c.Name),
             (msg, _) => Console.WriteLine("Exception: " + msg),
             (msg, _) => Console.WriteLine("Bad idea: " + msg));
-        }
 
-        Match(1);
-        Match(2);
-        Match(3);
+        // Method #3 - Use separate methods. This allows us to use method groups which is even neater
+        client.GetCustomerFallible(3)
+          .Match(OnSuccess,
+            OnFailure,
+            // Note that we can't use a method group here as we aren't passing the second parameter along
+            (msg, _) => OnBadIdea(msg));
+
         Console.ReadKey();
       }
+    }
+
+    private static void OnSuccess(Customer c) {
+      Console.WriteLine("Success: (" + c.ID + ") " + c.Name);
+    }
+
+    private static void OnFailure(string msg, string st) {
+      Console.WriteLine("Exception: " + msg + ". Stack trace starts... " + st.Substring(0, 20));
+    }
+
+    private static void OnBadIdea(string msg) {
+      Console.WriteLine("Bad idea: " + msg);
     }
   }
 }
