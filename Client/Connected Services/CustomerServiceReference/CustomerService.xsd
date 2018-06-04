@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Entities" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Entities" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="Customer">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ID" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Customer" nillable="true" type="tns:Customer" />
+  <xs:complexType name="FallibleOfCustomer2e3ESk9D">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="FallibleOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/Entities" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="Customer" Namespace="http://schemas.datacontract.org/2004/07/Entities" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence />
+  </xs:complexType>
+  <xs:element name="FallibleOfCustomer2e3ESk9D" nillable="true" type="tns:FallibleOfCustomer2e3ESk9D" />
+  <xs:complexType name="SuccessOfCustomer2e3ESk9D">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="SuccessOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/Entities" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="Customer" Namespace="http://schemas.datacontract.org/2004/07/Entities" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:FallibleOfCustomer2e3ESk9D">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="SuccessOfCustomer2e3ESk9D" nillable="true" type="tns:SuccessOfCustomer2e3ESk9D" />
+  <xs:complexType name="BadIdeaOfCustomer2e3ESk9D">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="BadIdeaOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/Entities" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="Customer" Namespace="http://schemas.datacontract.org/2004/07/Entities" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:FallibleOfCustomer2e3ESk9D">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BadIdeaOfCustomer2e3ESk9D" nillable="true" type="tns:BadIdeaOfCustomer2e3ESk9D" />
+  <xs:complexType name="FailureOfCustomer2e3ESk9D">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="FailureOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/Entities" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="Customer" Namespace="http://schemas.datacontract.org/2004/07/Entities" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:FallibleOfCustomer2e3ESk9D">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="FailureOfCustomer2e3ESk9D" nillable="true" type="tns:FailureOfCustomer2e3ESk9D" />
+  <xs:complexType name="Fallible">
+    <xs:sequence />
+  </xs:complexType>
+  <xs:element name="Fallible" nillable="true" type="tns:Fallible" />
+  <xs:complexType name="Success">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Fallible">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Success" nillable="true" type="tns:Success" />
+  <xs:complexType name="BadIdea">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Fallible">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BadIdea" nillable="true" type="tns:BadIdea" />
+  <xs:complexType name="Failure">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:Fallible">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Failure" nillable="true" type="tns:Failure" />
+</xs:schema>
