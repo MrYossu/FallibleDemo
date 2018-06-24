@@ -4,6 +4,7 @@ using System.Runtime.Serialization;
 namespace Entities {
   [DataContract]
   public abstract class Fallible<T> {
+    // This method does the fallible work, and so would normally only be called in the service layer
     public static Fallible<T> Do(Func<T> f) {
       Fallible<T> result;
       try {
@@ -20,6 +21,7 @@ namespace Entities {
       return result;
     }
 
+    // This method handles the fallible result, so would normally only be called in the client
     // C#7 version
     public void Match(Action<T> onSuccess, Action<string, string> onFailure, Action<string, string> onBadIdea = null) {
       switch (this) {

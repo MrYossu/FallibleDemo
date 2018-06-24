@@ -18,8 +18,7 @@ namespace Wcf {
     [OperationContract]
     [ServiceKnownType("GetCustomerFallibleTypes", typeof(KnownTypesHelper))]
     public Fallible<Customer> GetCustomerFallible(int id) {
-      Fallible<Customer> c = Fallible<Customer>.Do(() => _customerServiceLogic.GetCustomer(id));
-      return c;
+      return Fallible<Customer>.Do(() => _customerServiceLogic.GetCustomer(id));
     }
   }
 }

@@ -26,6 +26,12 @@ namespace Client {
             // Note that we can't use a method group here as we aren't passing the second parameter along
             (msg, _) => OnBadIdea(msg));
 
+        // In production code, the above would probably be written as follows, as it is neater...
+        //client.GetCustomerFallible(3)
+        //  .Match(OnSuccess, OnFailure, (msg, _) => OnBadIdea(msg));
+        // ...or if we aren't anticipating a bad idea...
+        //client.GetCustomerFallible(3).Match(OnSuccess, OnFailure);
+
         Console.ReadKey();
       }
     }
