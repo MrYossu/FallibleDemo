@@ -1,6 +1,7 @@
 ﻿using System.ServiceModel;
 using System.ServiceModel.Activation;
 using Entities;
+using log4net;
 
 namespace Wcf {
   [ServiceContract(Namespace = "")]
@@ -9,6 +10,11 @@ namespace Wcf {
   public class CustomerService {
     // Pseudo-inject
     private readonly CustomerServiceLogic _customerServiceLogic = new CustomerServiceLogic();
+    private static ILog _logger;
+
+    public CustomerService() {
+      SetUpLog4net();
+    }
 
     [OperationContract]
     public Customer GetCustomerRegular(int id) {
@@ -20,5 +26,11 @@ namespace Wcf {
     public Fallible<Customer> GetCustomerFallible(int id) {
       return Fallible<Customer>.Do(() => _customerServiceLogic.GetCustomer(id));
     }
+
+    private static void SetUpLog4net() {
+      log4net.Config.XmlConfigurator.Configure();
+      _logger = LogManager.GetLogger(typeof(CustomerService));
+    }
+
   }
 }

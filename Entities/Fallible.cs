@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using log4net;
 
 namespace Entities {
   [DataContract]
   public class Fallible<T> {
     // Would be injected
-    private LoggerInterface _logger = new Logger();
+    private ILog _logger = LogManager.GetLogger(typeof(Fallible<T>));
 
     // This method does the fallible work, and so would normally only be called in the service layer
     protected Fallible() {
@@ -24,10 +25,11 @@ namespace Entities {
         result = new Success<T> { Value = fResult };
       }
       catch (BadIdeaException ex) {
+        _logger.Debug("Bad idea: " + ex.Message + " at " + ex.StackTrace.Substring(0, 30) + "...");
         result = new BadIdea<T> { Message = ex.Message, StackTrace = ex.StackTrace };
       }
       catch (Exception ex) {
-        _logger.Log("Exception: " + ex.Message + " at " + ex.StackTrace.Substring(0, 30) + "...");
+        _logger.Error("Exception: " + ex.Message + " at " + ex.StackTrace.Substring(0, 30) + "...");
         result = new Failure<T> { Message = ex.Message, StackTrace = ex.StackTrace };
       }
       return result;
