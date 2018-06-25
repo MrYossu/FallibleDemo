@@ -3,9 +3,21 @@ using System.Runtime.Serialization;
 
 namespace Entities {
   [DataContract]
-  public abstract class Fallible<T> {
+  public class Fallible<T> {
+    // Would be injected
+    private LoggerInterface _logger = new Logger();
+
     // This method does the fallible work, and so would normally only be called in the service layer
+    protected Fallible() {
+    }
+
     public static Fallible<T> Do(Func<T> f) {
+      Fallible<T> fall = new Fallible<T>();
+      return fall.DoPrivate(f);
+    }
+
+    private Fallible<T> DoPrivate(Func<T> f) {
+      // This is an instance method, so can access the injected logger
       Fallible<T> result;
       try {
         T fResult = f();
@@ -15,7 +27,7 @@ namespace Entities {
         result = new BadIdea<T> { Message = ex.Message, StackTrace = ex.StackTrace };
       }
       catch (Exception ex) {
-        // NOTE that in a real application, we would log the exception at this point. Only issue is that this method is static, so no injection
+        _logger.Log("Exception: " + ex.Message + " at " + ex.StackTrace.Substring(0, 30) + "...");
         result = new Failure<T> { Message = ex.Message, StackTrace = ex.StackTrace };
       }
       return result;
