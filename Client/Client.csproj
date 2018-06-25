@@ -69,6 +69,7 @@
     </None>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\Entities.Customer.datasource" />
+    <None Include="Properties\DataSources\Entities.Fallible.datasource" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />

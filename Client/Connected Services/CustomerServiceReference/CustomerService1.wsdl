@@ -19,6 +19,12 @@
   <wsdl:message name="CustomerService_GetCustomerFallible_OutputMessage">
     <wsdl:part name="parameters" element="GetCustomerFallibleResponse" />
   </wsdl:message>
+  <wsdl:message name="CustomerService_UpdateCustomer_InputMessage">
+    <wsdl:part name="parameters" element="UpdateCustomer" />
+  </wsdl:message>
+  <wsdl:message name="CustomerService_UpdateCustomer_OutputMessage">
+    <wsdl:part name="parameters" element="UpdateCustomerResponse" />
+  </wsdl:message>
   <wsdl:portType name="CustomerService">
     <wsdl:operation name="GetCustomerRegular">
       <wsdl:input wsaw:Action="urn:CustomerService/GetCustomerRegular" message="CustomerService_GetCustomerRegular_InputMessage" />
@@ -27,6 +33,10 @@
     <wsdl:operation name="GetCustomerFallible">
       <wsdl:input wsaw:Action="urn:CustomerService/GetCustomerFallible" message="CustomerService_GetCustomerFallible_InputMessage" />
       <wsdl:output wsaw:Action="urn:CustomerService/GetCustomerFallibleResponse" message="CustomerService_GetCustomerFallible_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateCustomer">
+      <wsdl:input wsaw:Action="urn:CustomerService/UpdateCustomer" message="CustomerService_UpdateCustomer_InputMessage" />
+      <wsdl:output wsaw:Action="urn:CustomerService/UpdateCustomerResponse" message="CustomerService_UpdateCustomer_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>

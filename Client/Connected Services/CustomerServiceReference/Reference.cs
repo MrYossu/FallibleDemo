@@ -29,6 +29,15 @@ namespace Client.CustomerServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:CustomerService/GetCustomerFallible", ReplyAction="urn:CustomerService/GetCustomerFallibleResponse")]
         System.Threading.Tasks.Task<Entities.Fallible<Entities.Customer>> GetCustomerFallibleAsync(int id);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:CustomerService/UpdateCustomer", ReplyAction="urn:CustomerService/UpdateCustomerResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Entities.Success))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Entities.BadIdea))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(Entities.Failure))]
+        Entities.Fallible UpdateCustomer(Entities.Customer c);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:CustomerService/UpdateCustomer", ReplyAction="urn:CustomerService/UpdateCustomerResponse")]
+        System.Threading.Tasks.Task<Entities.Fallible> UpdateCustomerAsync(Entities.Customer c);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -72,6 +81,14 @@ namespace Client.CustomerServiceReference {
         
         public System.Threading.Tasks.Task<Entities.Fallible<Entities.Customer>> GetCustomerFallibleAsync(int id) {
             return base.Channel.GetCustomerFallibleAsync(id);
+        }
+        
+        public Entities.Fallible UpdateCustomer(Entities.Customer c) {
+            return base.Channel.UpdateCustomer(c);
+        }
+        
+        public System.Threading.Tasks.Task<Entities.Fallible> UpdateCustomerAsync(Entities.Customer c) {
+            return base.Channel.UpdateCustomerAsync(c);
         }
     }
 }

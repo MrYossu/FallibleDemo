@@ -14,9 +14,9 @@ namespace Entities {
     }
 
     // The [CallerMemberName] attribute (.NET4.5/C#5) adds the name of the method that called this, which we use for logging
-    public static Fallible<T> Do(Func<T> f, [CallerMemberName] string caller = null) {
+    public static Fallible<T> Do(Func<T> f, [CallerMemberName] string callingMethod = null) {
       Fallible<T> fall = new Fallible<T>();
-      return fall.DoPrivate(f, caller);
+      return fall.DoPrivate(f, callingMethod);
     }
 
     private Fallible<T> DoPrivate(Func<T> f, string caller) {
@@ -77,18 +77,29 @@ namespace Entities {
   }
 
   [DataContract]
-  public abstract class Fallible {
-    public static Fallible Do(Action f) {
+  public class Fallible {
+    private ILog _logger = LogManager.GetLogger(typeof(Fallible));
+
+    protected Fallible() {
+    }
+
+    public static Fallible Do(Action f, [CallerMemberName] string callingMethod = null) {
+      Fallible fall = new Fallible();
+      return fall.DoPrivate(f, callingMethod);
+    }
+
+    private Fallible DoPrivate(Action f, string caller) {
       Fallible result;
       try {
         f();
         result = new Success();
       }
       catch (BadIdeaException ex) {
+        _logger.Debug("Bad idea: " + ex.Message + " at " + caller + " - " + ex.StackTrace.Substring(0, 30) + "...");
         result = new BadIdea { Message = ex.Message, StackTrace = ex.StackTrace };
       }
       catch (Exception ex) {
-        // NOTE that in a real application, we would log the exception at this point
+        _logger.Error("Exception: " + ex.Message + " at " + caller + " - " + ex.StackTrace.Substring(0, 30) + "...");
         result = new Failure { Message = ex.Message, StackTrace = ex.StackTrace };
       }
       return result;

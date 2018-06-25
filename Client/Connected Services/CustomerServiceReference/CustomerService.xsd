@@ -3,6 +3,7 @@
   <xs:complexType name="Customer">
     <xs:sequence>
       <xs:element minOccurs="0" name="ID" type="xs:int" />
+      <xs:element minOccurs="0" name="LastUpdated" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
@@ -28,7 +29,9 @@
     </xs:annotation>
     <xs:complexContent mixed="false">
       <xs:extension base="tns:FallibleOfCustomer2e3ESk9D">
-        <xs:sequence />
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Value" nillable="true" type="tns:Customer" />
+        </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -43,7 +46,10 @@
     </xs:annotation>
     <xs:complexContent mixed="false">
       <xs:extension base="tns:FallibleOfCustomer2e3ESk9D">
-        <xs:sequence />
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="StackTrace" nillable="true" type="xs:string" />
+        </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -58,7 +64,10 @@
     </xs:annotation>
     <xs:complexContent mixed="false">
       <xs:extension base="tns:FallibleOfCustomer2e3ESk9D">
-        <xs:sequence />
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="StackTrace" nillable="true" type="xs:string" />
+        </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -78,7 +87,10 @@
   <xs:complexType name="BadIdea">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:Fallible">
-        <xs:sequence />
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="StackTrace" nillable="true" type="xs:string" />
+        </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -86,7 +98,10 @@
   <xs:complexType name="Failure">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:Fallible">
-        <xs:sequence />
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="StackTrace" nillable="true" type="xs:string" />
+        </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>

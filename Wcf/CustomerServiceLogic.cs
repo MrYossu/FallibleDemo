@@ -12,8 +12,15 @@ namespace Wcf {
       }
       return new Customer {
         ID = id,
-        Name = "Jim " + id
+        Name = "Jim " + id,
+        LastUpdated = DateTime.Now
       };
+    }
+
+    public void UpdateCustomer(Customer c) {
+      if (c.LastUpdated < DateTime.Now.AddMilliseconds(-100)) {
+        throw new BadIdeaException("the customer data is out of date");
+      }
     }
   }
 }

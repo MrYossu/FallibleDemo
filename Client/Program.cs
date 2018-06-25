@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Client.CustomerServiceReference;
 using Entities;
 using log4net;
@@ -6,6 +7,7 @@ using log4net;
 namespace Client {
   class Program {
     private static ILog _logger;
+
     static void Main(string[] args) {
       SetUpLog4net();
       using (CustomerServiceClient client = new CustomerServiceClient()) {
@@ -50,6 +52,29 @@ namespace Client {
     private static void OnSuccess(Customer c) {
       _logger.Debug("Success: (" + c.ID + ") " + c.Name);
       Console.WriteLine("Success: (" + c.ID + ") " + c.Name);
+      // Wait until the data is too old, then try to update. This should raise a BadIdeaException
+      using (CustomerServiceClient client = new CustomerServiceClient()) {
+        // Try this twice, once immediately, and again after an unacceptable pause
+        UpdateCustomer(c, client);
+        Thread.Sleep(100);
+        UpdateCustomer(c, client);
+      }
+    }
+
+    private static void UpdateCustomer(Customer c, CustomerServiceClient client) {
+      client.UpdateCustomer(c)
+        .Match(() => {
+            Console.WriteLine("Successfully saved the customer");
+            _logger.Debug("Successfully saved the customer");
+          },
+          (msg, _) => {
+            Console.WriteLine("Saving the customer failed: " + msg);
+            _logger.Debug("Saving the customer failed: " + msg);
+          },
+          (msg, _) => {
+            Console.WriteLine("Saving the customer was a bad idea because " + msg);
+            _logger.Debug("Saving the customer was a bad idea because " + msg);
+          });
     }
 
     private static void OnFailure(string msg, string st) {
