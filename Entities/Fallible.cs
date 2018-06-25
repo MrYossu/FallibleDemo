@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using log4net;
 
@@ -12,12 +13,13 @@ namespace Entities {
     protected Fallible() {
     }
 
-    public static Fallible<T> Do(Func<T> f) {
+    // The [CallerMemberName] attribute (.NET4.5/C#5) adds the name of the method that called this, which we use for logging
+    public static Fallible<T> Do(Func<T> f, [CallerMemberName] string caller = null) {
       Fallible<T> fall = new Fallible<T>();
-      return fall.DoPrivate(f);
+      return fall.DoPrivate(f, caller);
     }
 
-    private Fallible<T> DoPrivate(Func<T> f) {
+    private Fallible<T> DoPrivate(Func<T> f, string caller) {
       // This is an instance method, so can access the injected logger
       Fallible<T> result;
       try {
@@ -25,11 +27,11 @@ namespace Entities {
         result = new Success<T> { Value = fResult };
       }
       catch (BadIdeaException ex) {
-        _logger.Debug("Bad idea: " + ex.Message + " at " + ex.StackTrace.Substring(0, 30) + "...");
+        _logger.Debug("Bad idea: " + ex.Message + " at " + caller + " - " + ex.StackTrace.Substring(0, 30) + "...");
         result = new BadIdea<T> { Message = ex.Message, StackTrace = ex.StackTrace };
       }
       catch (Exception ex) {
-        _logger.Error("Exception: " + ex.Message + " at " + ex.StackTrace.Substring(0, 30) + "...");
+        _logger.Error("Exception: " + ex.Message + " at " + caller + " - " + ex.StackTrace.Substring(0, 30) + "...");
         result = new Failure<T> { Message = ex.Message, StackTrace = ex.StackTrace };
       }
       return result;
