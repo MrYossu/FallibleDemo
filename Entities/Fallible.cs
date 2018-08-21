@@ -59,6 +59,7 @@ namespace Entities {
           }
           break;
         case Failure<T> failure:
+          // TODO AYS - Handle exception
           onFailure(failure.Message, failure.StackTrace);
           break;
       }

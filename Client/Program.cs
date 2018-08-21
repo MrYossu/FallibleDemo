@@ -38,7 +38,8 @@ namespace Client {
         //client.GetCustomerFallible(3)
         //  .Match(OnSuccess, OnFailure, (msg, _) => OnBadIdea(msg));
         // ...or if we aren't anticipating a bad idea...
-        //client.GetCustomerFallible(3).Match(OnSuccess, OnFailure);
+        // NOTE - Yossi wants us to use methods instead of lambdas, as this gives tracing
+        client.GetCustomerFallible(3).Match(OnSuccess, OnFailure);
 
         Console.ReadKey();
       }
