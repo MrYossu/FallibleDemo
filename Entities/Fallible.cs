@@ -46,42 +46,42 @@ namespace Entities {
 
     // This method handles the fallible result, so would normally only be called in the client
     // C#7 version
-    public void Match(Action<T> onSuccess, Action<string, string> onFailure, Action<string, string> onBadIdea = null) {
-      switch (this) {
-        case Success<T> success:
-          onSuccess(success.Value);
-          break;
-        case BadIdea<T> badIdea:
-          if (onBadIdea != null) {
-            onBadIdea(badIdea.Message, badIdea.StackTrace);
-          } else {
-            onFailure(badIdea.Message, badIdea.StackTrace);
-          }
-          break;
-        case Failure<T> failure:
-          // TODO AYS - Handle exception
-          onFailure(failure.Message, failure.StackTrace);
-          break;
-      }
-    }
-
-    // C#6 version
     //public void Match(Action<T> onSuccess, Action<string, string> onFailure, Action<string, string> onBadIdea = null) {
-    //  if (this is Success<T>) {
-    //    Success<T> success = (Success<T>)this;
-    //    onSuccess(success.Value);
-    //  } else if (this is BadIdea<T>) {
-    //    BadIdea<T> badIdea = (BadIdea<T>)this;
-    //    if (onBadIdea != null) {
-    //      onBadIdea(badIdea.Message, badIdea.StackTrace);
-    //    } else {
-    //      onFailure(badIdea.Message, badIdea.StackTrace);
-    //    }
-    //  } else if (this is Failure<T>) {
-    //    Failure<T> failure = (Failure<T>)this;
-    //    onFailure(failure.Message, failure.StackTrace);
+    //  switch (this) {
+    //    case Success<T> success:
+    //      onSuccess(success.Value);
+    //      break;
+    //    case BadIdea<T> badIdea:
+    //      if (onBadIdea != null) {
+    //        onBadIdea(badIdea.Message, badIdea.StackTrace);
+    //      } else {
+    //        onFailure(badIdea.Message, badIdea.StackTrace);
+    //      }
+    //      break;
+    //    case Failure<T> failure:
+    //      // TODO AYS - Handle exception
+    //      onFailure(failure.Message, failure.StackTrace);
+    //      break;
     //  }
     //}
+
+    // C#6 version
+    public void Match(Action<T> onSuccess, Action<string, string> onFailure, Action<string, string> onBadIdea = null) {
+      if (this is Success<T>) {
+        Success<T> success = (Success<T>)this;
+        onSuccess(success.Value);
+      } else if (this is BadIdea<T>) {
+        BadIdea<T> badIdea = (BadIdea<T>)this;
+        if (onBadIdea != null) {
+          onBadIdea(badIdea.Message, badIdea.StackTrace);
+        } else {
+          onFailure(badIdea.Message, badIdea.StackTrace);
+        }
+      } else if (this is Failure<T>) {
+        Failure<T> failure = (Failure<T>)this;
+        onFailure(failure.Message, failure.StackTrace);
+      }
+    }
   }
 
   [DataContract]
