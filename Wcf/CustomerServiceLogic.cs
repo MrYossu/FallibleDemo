@@ -12,7 +12,7 @@ namespace Wcf {
       }
       return new Customer {
         ID = id,
-        Name = "Jim " + id,
+        Name = "Jim Spriggs",
         LastUpdated = DateTime.Now
       };
     }

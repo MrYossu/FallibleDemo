@@ -66,20 +66,20 @@ namespace Entities {
     //}
 
     // C#6 version
-    public void Match(Action<T> onSuccess, Action<string, string> onFailure, Action<string, string> onBadIdea = null) {
+    public void Match(Action<T> onSuccess, Action<string> onFailure, Action<string> onBadIdea = null) {
       if (this is Success<T>) {
         Success<T> success = (Success<T>)this;
         onSuccess(success.Value);
       } else if (this is BadIdea<T>) {
         BadIdea<T> badIdea = (BadIdea<T>)this;
         if (onBadIdea != null) {
-          onBadIdea(badIdea.Message, badIdea.StackTrace);
+          onBadIdea(badIdea.Message);
         } else {
-          onFailure(badIdea.Message, badIdea.StackTrace);
+          onFailure(badIdea.Message);
         }
       } else if (this is Failure<T>) {
         Failure<T> failure = (Failure<T>)this;
-        onFailure(failure.Message, failure.StackTrace);
+        onFailure(failure.Message);
       }
     }
   }
@@ -121,20 +121,20 @@ namespace Entities {
       return callingType;
     }
 
-    public void Match(Action onSuccess, Action<string, string> onFailure, Action<string, string> onBadIdea = null) {
+    public void Match(Action onSuccess, Action<string> onFailure, Action<string> onBadIdea = null) {
       switch (this) {
         case Success _:
           onSuccess();
           break;
         case BadIdea badIdea:
           if (onBadIdea != null) {
-            onBadIdea(badIdea.Message, badIdea.StackTrace);
+            onBadIdea(badIdea.Message);
           } else {
-            onFailure(badIdea.Message, badIdea.StackTrace);
+            onFailure(badIdea.Message);
           }
           break;
         case Failure failure:
-          onFailure(failure.Message, failure.StackTrace);
+          onFailure(failure.Message);
           break;
       }
     }
