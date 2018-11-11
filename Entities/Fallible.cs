@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.Serialization;
-using log4net;
 
 namespace Entities {
   [DataContract]
@@ -19,17 +18,14 @@ namespace Entities {
     private Fallible<T> DoPrivate(Func<T> f) {
       Fallible<T> result;
       // Create a logger based on the call stack, as that way we can set the type to be the class that made the call to Do()
-      ILog logger = LogManager.GetLogger(GetCallingType());
       try {
         T fResult = f();
         result = new Success<T> { Value = fResult };
       }
       catch (BadIdeaException ex) {
-        logger.Debug("Bad idea: " + ex.Message + Environment.NewLine + ex.StackTrace);
         result = new BadIdea<T> { Message = ex.Message, StackTrace = ex.StackTrace };
       }
       catch (Exception ex) {
-        logger.Error("Exception: " + ex.Message + Environment.NewLine + ex.StackTrace);
         result = new Failure<T> { Message = ex.Message, StackTrace = ex.StackTrace };
       }
       return result;
@@ -96,17 +92,14 @@ namespace Entities {
 
     private Fallible DoPrivate(Action f) {
       Fallible result;
-      ILog logger = LogManager.GetLogger(GetCallingType());
       try {
         f();
         result = new Success();
       }
       catch (BadIdeaException ex) {
-        logger.Debug("Bad idea: " + ex.Message + Environment.NewLine + ex.StackTrace);
         result = new BadIdea { Message = ex.Message, StackTrace = ex.StackTrace };
       }
       catch (Exception ex) {
-        logger.Error("Exception: " + ex.Message + Environment.NewLine + ex.StackTrace);
         result = new Failure { Message = ex.Message, StackTrace = ex.StackTrace };
       }
       return result;

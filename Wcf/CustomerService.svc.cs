@@ -10,10 +10,6 @@ namespace Wcf {
     // Pseudo-inject
     private readonly CustomerServiceLogic _customerServiceLogic = new CustomerServiceLogic();
 
-    public CustomerService() {
-      SetUpLog4net();
-    }
-
     [OperationContract]
     public Customer GetCustomerRegular(int id) {
       return _customerServiceLogic.GetCustomer(id);
@@ -29,10 +25,6 @@ namespace Wcf {
     [ServiceKnownType("GetCustomerFallibleTypes", typeof(KnownTypesHelper))]
     public Fallible UpdateCustomer(Customer c) {
       return Fallible.Do(()=>_customerServiceLogic.UpdateCustomer(c));
-    }
-
-    private static void SetUpLog4net() {
-      log4net.Config.XmlConfigurator.Configure();
     }
 
   }
