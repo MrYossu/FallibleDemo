@@ -6,33 +6,39 @@ using Entities;
 namespace Client {
   class Program {
     static void Main(string[] args) {
-      using (CustomerServiceClient client = new CustomerServiceClient()) {
+      using (CustomerServiceClient customerService = new CustomerServiceClient()) {
         // Method #1 - get the Fallible object, then deal with it
         // Note that we use named arguments to make the intention clearer
-        Fallible<Customer> cf = client.GetCustomerFallible(1);
+        Log("Requesting customer #1 (who has died)");
+        Fallible<Customer> cf = customerService.GetCustomerFallible(1);
         cf.Match(
           onSuccess: c => Log("Success: (" + c.ID + ") " + c.Name),
           onFailure: msg => Log("Exception: " + msg),
           onBadIdea: msg => Log("Bad idea: " + msg)
         );
+        Log("=============================");
 
         // Method #2 - Don't bother assigning the Fallible object to a local variable as we can't do anything
         // with it other than call match, so might as well call it directly. This is neater
-        client.GetCustomerFallible(2)
+        Log("Requesting customer #2 (who is rude)");
+        customerService.GetCustomerFallible(2)
           .Match(
             onSuccess: c => Log("Success: (" + c.ID + ") " + c.Name),
             onFailure: msg => Log("Exception: " + msg),
             onBadIdea: msg => Log("Bad idea: " + msg)
           );
+        Log("=============================");
 
         // Method #3 - Use separate methods. This allows us to use method groups which is even neater
-        // Given the obvious names, we don't need named arguments here, in other cases we might
-        client.GetCustomerFallible(3)
+        // Given the obvious names, we don't need named arguments here
+        Log("Requesting customer #3 (who returns without problem)");
+        customerService.GetCustomerFallible(3)
           .Match(
             OnGetCustomerSuccess,
             OnGetCustomerFailure,
             OnGetCustomerBadIdea
           );
+        Log("=============================");
 
         Console.ReadKey();
       }
@@ -43,8 +49,10 @@ namespace Client {
       // Wait until the data is too old, then try to update. This should raise a BadIdeaException
       using (CustomerServiceClient client = new CustomerServiceClient()) {
         // Try this twice, once immediately, and again after an unacceptable pause
+        Log($"Updating customer #{c.ID} immediately (which should succeed)");
         UpdateCustomer(c, client);
         Thread.Sleep(100);
+        Log($"Updating customer #{c.ID} after a pause of 0.1 seconds (which should fail)");
         UpdateCustomer(c, client);
       }
     }

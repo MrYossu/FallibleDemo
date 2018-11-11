@@ -10,10 +10,16 @@ namespace Wcf {
     // Pseudo-inject
     private readonly CustomerServiceLogic _customerServiceLogic = new CustomerServiceLogic();
 
+    #region Regular
+
     [OperationContract]
     public Customer GetCustomerRegular(int id) {
       return _customerServiceLogic.GetCustomer(id);
     }
+
+    #endregion
+
+    #region Fallible
 
     [OperationContract]
     [ServiceKnownType("GetCustomerFallibleTypes", typeof(KnownTypesHelper))]
@@ -24,8 +30,9 @@ namespace Wcf {
     [OperationContract]
     [ServiceKnownType("GetCustomerFallibleTypes", typeof(KnownTypesHelper))]
     public Fallible UpdateCustomer(Customer c) {
-      return Fallible.Do(()=>_customerServiceLogic.UpdateCustomer(c));
+      return Fallible.Do(() => _customerServiceLogic.UpdateCustomer(c));
     }
 
+    #endregion
   }
 }
